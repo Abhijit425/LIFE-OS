@@ -36,9 +36,9 @@ class NavigationTest {
         compose.onAllNodesWithText("Finance").onFirst().performClick()
         waitFor("never connects to your bank")
         compose.onAllNodesWithText("Tasks").onFirst().performClick()
-        waitFor("Kanban")
+        waitFor("Board")
         compose.onAllNodesWithText("LIFE AI").onFirst().performClick()
-        waitFor("Command engine arrives")
+        waitFor("Basic mode")
         compose.onAllNodesWithText("More").onFirst().performClick()
         waitFor("Every part of your life")
     }

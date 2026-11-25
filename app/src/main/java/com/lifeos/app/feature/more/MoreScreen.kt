@@ -52,7 +52,7 @@ fun MoreScreen(onOpenModule: (String) -> Unit, onOpenSettings: () -> Unit) {
                 title = module.title,
                 subtitle = module.summary,
                 icon = { Icon(module.icon, contentDescription = null, tint = LifeTheme.colors.accentCyan, modifier = Modifier.size(28.dp)) },
-                badge = "Phase ${module.phase}",
+                badge = null,
                 onClick = { onOpenModule(module.key) },
             )
         }

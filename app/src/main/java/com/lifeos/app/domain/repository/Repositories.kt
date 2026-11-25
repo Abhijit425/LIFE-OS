@@ -12,12 +12,16 @@ import java.time.ZoneId
 data class AppPreferences(
     val themeMode: ThemeMode = ThemeMode.DARK,
     val motion: MotionPreference = MotionPreference.FOLLOW_SYSTEM,
+    val appLock: Boolean = false,
+    val notificationsIntroShown: Boolean = false,
 )
 
 interface PreferencesRepository {
     val preferences: Flow<AppPreferences>
     suspend fun setThemeMode(mode: ThemeMode)
     suspend fun setMotion(pref: MotionPreference)
+    suspend fun setAppLock(enabled: Boolean)
+    suspend fun setNotificationsIntroShown()
 }
 
 interface ProfileRepository {

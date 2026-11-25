@@ -3,6 +3,7 @@ package com.lifeos.app.data.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.lifeos.app.data.local.dao.*
 import com.lifeos.app.data.local.dao.BudgetDao
 import com.lifeos.app.data.local.dao.CalendarEventDao
 import com.lifeos.app.data.local.dao.DashboardWidgetDao
@@ -65,14 +66,24 @@ abstract class LifeOsDatabase : RoomDatabase() {
     abstract fun userProfileDao(): UserProfileDao
     abstract fun dashboardWidgetDao(): DashboardWidgetDao
     abstract fun taskDao(): TaskDao
+    abstract fun subTaskDao(): SubTaskDao
+    abstract fun projectDao(): ProjectDao
+    abstract fun milestoneDao(): MilestoneDao
     abstract fun transactionDao(): TransactionDao
+    abstract fun accountDao(): AccountDao
     abstract fun budgetDao(): BudgetDao
+    abstract fun savingsGoalDao(): SavingsGoalDao
     abstract fun reminderDao(): ReminderDao
     abstract fun calendarEventDao(): CalendarEventDao
-    abstract fun goalDao(): GoalDao
     abstract fun familyMemberDao(): FamilyMemberDao
+    abstract fun healthDao(): HealthDao
     abstract fun noteDao(): NoteDao
+    abstract fun noteTagDao(): NoteTagDao
     abstract fun documentDao(): DocumentDao
+    abstract fun documentFolderDao(): DocumentFolderDao
+    abstract fun goalDao(): GoalDao
+    abstract fun habitDao(): HabitDao
+    abstract fun aiDao(): AiDao
 
     companion object {
         const val NAME = "lifeos.db"

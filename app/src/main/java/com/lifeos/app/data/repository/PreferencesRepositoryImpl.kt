@@ -2,6 +2,7 @@ package com.lifeos.app.data.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -24,6 +25,8 @@ class PreferencesRepositoryImpl @Inject constructor(
     private object Keys {
         val THEME = stringPreferencesKey("theme_mode")
         val MOTION = stringPreferencesKey("motion_pref")
+        val APP_LOCK = booleanPreferencesKey("app_lock")
+        val NOTIF_INTRO = booleanPreferencesKey("notif_intro")
     }
 
     override val preferences: Flow<AppPreferences> = dataStore.data
@@ -33,6 +36,8 @@ class PreferencesRepositoryImpl @Inject constructor(
                 themeMode = p[Keys.THEME]?.let { v -> ThemeMode.entries.firstOrNull { it.name == v } } ?: ThemeMode.DARK,
                 motion = p[Keys.MOTION]?.let { v -> MotionPreference.entries.firstOrNull { it.name == v } }
                     ?: MotionPreference.FOLLOW_SYSTEM,
+                appLock = p[Keys.APP_LOCK] ?: false,
+                notificationsIntroShown = p[Keys.NOTIF_INTRO] ?: false,
             )
         }
 
@@ -42,5 +47,13 @@ class PreferencesRepositoryImpl @Inject constructor(
 
     override suspend fun setMotion(pref: MotionPreference) {
         dataStore.edit { it[Keys.MOTION] = pref.name }
+    }
+
+    override suspend fun setAppLock(enabled: Boolean) {
+        dataStore.edit { it[Keys.APP_LOCK] = enabled }
+    }
+
+    override suspend fun setNotificationsIntroShown() {
+        dataStore.edit { it[Keys.NOTIF_INTRO] = true }
     }
 }

@@ -29,10 +29,21 @@ import com.lifeos.app.core.designsystem.theme.LifeTheme
 import com.lifeos.app.core.designsystem.theme.LocalLayoutInfo
 import com.lifeos.app.core.designsystem.theme.layoutInfoFor
 import com.lifeos.app.feature.assistant.AssistantScreen
+import com.lifeos.app.feature.calendar.CalendarScreen
 import com.lifeos.app.feature.dashboard.DashboardScreen
-import com.lifeos.app.feature.module.ModulePendingScreen
+import com.lifeos.app.feature.documents.DocumentPreviewScreen
+import com.lifeos.app.feature.documents.DocumentsScreen
+import com.lifeos.app.feature.family.FamilyScreen
+import com.lifeos.app.feature.finance.FinanceScreen
+import com.lifeos.app.feature.goals.GoalsScreen
+import com.lifeos.app.feature.health.HealthScreen
+import com.lifeos.app.feature.insights.InsightsScreen
 import com.lifeos.app.feature.more.MoreScreen
+import com.lifeos.app.feature.notes.NoteEditorScreen
+import com.lifeos.app.feature.notes.NotesScreen
 import com.lifeos.app.feature.settings.SettingsScreen
+import com.lifeos.app.feature.tasks.ProjectScreen
+import com.lifeos.app.feature.tasks.TasksScreen
 
 /** Root UI: adaptive navigation chrome (rail on tablets, floating bar on phones) + NavHost. */
 @Composable
@@ -61,11 +72,7 @@ fun LifeOsAppShell() {
                 } else {
                     Box(Modifier.fillMaxSize()) {
                         LifeNavHost(navController, Modifier.fillMaxSize())
-                        FloatingBottomBar(
-                            selected = selected,
-                            onSelect = onSelect,
-                            modifier = Modifier.align(Alignment.BottomCenter),
-                        )
+                        FloatingBottomBar(selected = selected, onSelect = onSelect, modifier = Modifier.align(Alignment.BottomCenter))
                     }
                 }
             }
@@ -86,13 +93,15 @@ private fun LifeNavHost(navController: NavHostController, modifier: Modifier) {
     val reduced = LifeTheme.reducedMotion
     val enter: EnterTransition = if (reduced) EnterTransition.None else fadeIn(tween(240)) + scaleIn(tween(240), initialScale = 0.985f)
     val exit: ExitTransition = if (reduced) ExitTransition.None else fadeOut(tween(160))
+    val back: () -> Unit = { navController.popBackStack() }
+    val openSettings: () -> Unit = { navController.navigate(SettingsRoute) { launchSingleTop = true } }
 
     val openModule: (String) -> Unit = { key ->
         when (key) {
             "finance" -> navController.navigateTopLevel(TopLevel.FINANCE)
             "tasks" -> navController.navigateTopLevel(TopLevel.TASKS)
             "assistant" -> navController.navigateTopLevel(TopLevel.ASSISTANT)
-            else -> navController.navigate(ModuleRoute(key))
+            else -> navController.navigate(ModuleRoute(key)) { launchSingleTop = true }
         }
     }
 
@@ -105,26 +114,26 @@ private fun LifeNavHost(navController: NavHostController, modifier: Modifier) {
         popEnterTransition = { enter },
         popExitTransition = { exit },
     ) {
-        composable<HomeRoute> {
-            DashboardScreen(
-                onOpenModule = openModule,
-                onOpenSettings = { navController.navigate(SettingsRoute) { launchSingleTop = true } },
-            )
-        }
-        composable<AssistantRoute> { AssistantScreen() }
-        composable<FinanceRoute> { ModulePendingScreen(LifeModule.FINANCE, onBack = null) }
-        composable<TasksRoute> { ModulePendingScreen(LifeModule.TASKS, onBack = null) }
-        composable<MoreRoute> {
-            MoreScreen(
-                onOpenModule = openModule,
-                onOpenSettings = { navController.navigate(SettingsRoute) { launchSingleTop = true } },
-            )
-        }
-        composable<SettingsRoute> { SettingsScreen(onBack = { navController.popBackStack() }) }
+        composable<HomeRoute> { DashboardScreen(onOpenModule = openModule, onOpenSettings = openSettings) }
+        composable<AssistantRoute> { AssistantScreen(onOpenSettings = openSettings) }
+        composable<FinanceRoute> { FinanceScreen() }
+        composable<TasksRoute> { TasksScreen(onOpenProject = { navController.navigate(ProjectRoute(it)) }) }
+        composable<ProjectRoute> { ProjectScreen(onBack = back) }
+        composable<MoreRoute> { MoreScreen(onOpenModule = openModule, onOpenSettings = openSettings) }
+        composable<SettingsRoute> { SettingsScreen(onBack = back) }
+        composable<NoteRoute> { NoteEditorScreen(onBack = back) }
+        composable<DocumentRoute> { DocumentPreviewScreen(onBack = back) }
         composable<ModuleRoute> { entry ->
-            val route = entry.toRoute<ModuleRoute>()
-            val module = LifeModule.fromKey(route.key) ?: LifeModule.NOTES
-            ModulePendingScreen(module, onBack = { navController.popBackStack() })
+            when (LifeModule.fromKey(entry.toRoute<ModuleRoute>().key)) {
+                LifeModule.FAMILY -> FamilyScreen(onBack = back)
+                LifeModule.HEALTH -> HealthScreen(onBack = back)
+                LifeModule.CALENDAR -> CalendarScreen(onBack = back)
+                LifeModule.GOALS -> GoalsScreen(onBack = back)
+                LifeModule.DOCUMENTS -> DocumentsScreen(onBack = back, onOpen = { navController.navigate(DocumentRoute(it)) })
+                LifeModule.NOTES -> NotesScreen(onOpen = { navController.navigate(NoteRoute(it)) })
+                LifeModule.INSIGHTS -> InsightsScreen(onBack = back)
+                null -> MoreScreen(onOpenModule = openModule, onOpenSettings = openSettings)
+            }
         }
     }
 }

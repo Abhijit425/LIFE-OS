@@ -102,6 +102,7 @@ fun LifeTextField(
     isError: Boolean = false,
     supportingText: String? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
+    visualTransformation: androidx.compose.ui.text.input.VisualTransformation = androidx.compose.ui.text.input.VisualTransformation.None,
 ) {
     val colors = LifeTheme.colors
     OutlinedTextField(
@@ -112,6 +113,7 @@ fun LifeTextField(
         isError = isError,
         supportingText = supportingText?.let { { Text(it) } },
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        visualTransformation = visualTransformation,
         shape = Radii.md,
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = colors.accentCyan,

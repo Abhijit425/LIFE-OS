@@ -6,3 +6,6 @@
     kotlinx.serialization.KSerializer serializer(...);
 }
 -keep,includedescriptorclasses class com.lifeos.app.**$$serializer { *; }
+
+# JSON export reads entity fields reflectively.
+-keep class com.lifeos.app.data.local.entity.** { *; }
