@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- LIFE OS mark: a glowing orbit ring around a core. Safe zone is the centre 66dp. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Outer ring -->
+    <path
+        android:pathData="M54,30 A24,24 0 1,1 53.99,30 Z"
+        android:fillColor="#00000000"
+        android:strokeWidth="5"
+        android:strokeLineCap="round">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:type="linear"
+                android:startX="30" android:startY="30"
+                android:endX="78" android:endY="78"
+                android:startColor="#FF8B5CF6"
+                android:centerColor="#FF3B82F6"
+                android:endColor="#FF22D3EE" />
+        </aapt:attr>
+    </path>
+    <!-- Core -->
+    <path android:pathData="M54,44 A10,10 0 1,1 53.99,44 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="radial"
+                android:centerX="51" android:centerY="51"
+                android:gradientRadius="12"
+                android:startColor="#FFFFFFFF"
+                android:endColor="#FF22D3EE" />
+        </aapt:attr>
+    </path>
+    <!-- Orbiting satellite -->
+    <path
+        android:pathData="M74,38 A4,4 0 1,1 73.99,38 Z"
+        android:fillColor="#FFC4B5FD" />
+</vector>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Window theme. Compose draws everything else; this only avoids a white flash. -->
+    <style name="Theme.LifeOS" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/midnight</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <!-- Splash screen (androidx core-splashscreen, works back to API 23). -->
+    <style name="Theme.LifeOS.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/midnight</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.LifeOS</item>
+    </style>
+</resources>
