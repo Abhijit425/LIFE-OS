@@ -4,29 +4,30 @@
 A private, offline-first personal operating system for Android, built for tablets first (it adapts down to phones).
 Kotlin · Jetpack Compose · Material 3 · Hilt · Room · DataStore.
 
-> **Status: Phase 1 of 8 complete** — architecture, design system, adaptive navigation, a real-data dashboard,
-> and working settings (name, theme, motion). Finance and Tasks arrive in Phase 2; their screens say so honestly.
+> **Status: v1.0.0, all phases built.** Every module works offline on your own data. A fresh install starts empty; it never shows sample numbers.
 
----
+## Features
 
-## What works in Phase 1
-
-| Area | State |
+| Module | What you can do |
 |---|---|
-| Project, Gradle (Kotlin DSL + version catalog), CI | ✅ |
-| Glass design system: colour, type, spacing tokens; cards, buttons, inputs, dialogs, charts, loading/empty/error states | ✅ |
-| Adaptive navigation: **floating side rail on tablets** (≥600dp), floating bottom bar on phones | ✅ |
-| Dashboard reading only stored records, 8 widgets, show/hide/reorder/reset, pull-to-refresh, reminders sheet | ✅ |
-| Room schema v1 for **every** module (25 tables, FKs, indices, exported schema) | ✅ |
-| Settings: profile name, Dark/Light/System theme, motion (follow system / full / reduced), About | ✅ |
-| Splash screen (androidx core-splashscreen) and adaptive + themed app icon | ✅ |
-| LIFE AI animated orb; command engine | 🔜 Phase 5 |
-| Finance, Tasks, Notes | 🔜 Phase 2 |
-| Family, Health, Calendar, Reminders/notifications | 🔜 Phase 3 |
-| Documents, Goals, Analytics | 🔜 Phase 4 |
-| Security, encrypted backup/restore, export | 🔜 Phase 6 |
+| **Dashboard** | Greeting, life overview, 8 widgets from real records: show, hide, reorder, reset, pull to refresh |
+| **LIFE AI** | Offline command engine (rule-based, not generative): spending and income questions, category breakdown, budget status, add expense/income, reminders, tasks (add, complete, delete with confirmation), savings goals, appointments, schedule, weekly summary, notes. Conversation history is saved. |
+| **Finance (₹)** | Income and expenses, categories, accounts, cards, loans with EMI reminders, monthly budgets, recurring transactions, savings goals, donut and 6-month charts. Manual only; it never connects to banks. |
+| **Tasks** | Priorities, due dates and times, reminders, recurrence, subtasks, categories, search and filters, Kanban board, projects with milestones and progress |
+| **Notes** | Rich text (Markdown subset with preview), checklists, tags, categories, pin, archive, search, links to tasks and projects |
+| **Family** | Profiles, automatic yearly birthday reminders, emergency contacts with one-tap dial, notes |
+| **Health** | Water, sleep, weight and exercise logs; health notes; medicine reminders (doses stored exactly as entered); appointments with a 1-hour alert; per-person tracking. Not medical advice. |
+| **Calendar** | Month, week and day views; events; all reminders (bill, birthday, general and more) with recurrence |
+| **Documents** | SAF import of PDF, images and text. Store as a reference, a private copy or a Keystore-encrypted copy. Folders, tags, categories, search, expiry reminders, in-app preview (PDF pages, images, text) |
+| **Goals** | Goals with automatic 25/50/75/100% milestones, habits with streaks, weekly check-ins, achievement badges |
+| **Insights** | Weekly report, tasks per day, spending breakdown, habit consistency |
+| **Settings** | Profile, theme, motion, reminder delivery checks, biometric app lock, encrypted backup and restore, JSON/CSV export, optional GGUF model import |
 
-On a fresh install the dashboard shows empty states — it never shows sample numbers.
+### Reminders
+AlarmManager uses exact alarms when Android allows them (Android 12+ asks for "Alarms & reminders") and inexact alarms otherwise. Alarms are rebuilt from the database after a reboot, app update, clock change or time-zone change, and a WorkManager job re-checks them twice a day. Some phone makers (Vivo, Oppo, Xiaomi and others) aggressively stop background work. **Settings → Reminder delivery** links to the battery setting to change.
+
+### Local LLM: what's included
+LIFE AI's basic mode is the rule-based engine above and is always available. **This build lets you import a GGUF model and checks your device's RAM and storage, but it does not include the llama.cpp inference engine.** An imported model is stored but not used, and the app says so. Adding llama.cpp means compiling native code with the NDK. It's a planned next step and wasn't shipped half-working.
 
 ## Tablet layout
 - **≥ 840dp** (landscape tablets): side rail + 3-column staggered dashboard, two-column Settings.

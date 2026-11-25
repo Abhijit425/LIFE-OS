@@ -96,6 +96,8 @@ class MainActivity : FragmentActivity() {
                 enableEdgeToEdge(statusBarStyle = style, navigationBarStyle = style)
                 onDispose { }
             }
+            // Lock only applies from a cold start / long background; turning the setting on doesn't lock you out mid-session.
+            LaunchedEffect(prefs != null, current.appLock) { if (prefs != null && !current.appLock) locked = false }
             LifeOsTheme(themeMode = current.themeMode, motionPreference = current.motion) {
                 if (prefs != null && current.appLock && locked) {
                     LockScreen(onUnlock = { authenticate() })

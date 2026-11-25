@@ -20,6 +20,8 @@ import com.lifeos.app.domain.model.TransactionType
 import com.lifeos.app.domain.usecase.DashboardMath
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.time.YearMonth
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -39,6 +41,7 @@ class FinanceRepository @Inject constructor(
     private val time: TimeProvider,
 ) {
     private val tx get() = db.transactionDao()
+    private val recurringLock = Mutex()
 
     fun currentMonth(): YearMonth = YearMonth.from(time.now().atZone(time.zone()))
 
@@ -145,7 +148,9 @@ class FinanceRepository @Inject constructor(
      * Recurring transactions: the newest instance of a series carries the recurrence flag.
      * When its next date arrives, a new instance is posted and becomes the series head.
      */
-    suspend fun processRecurring(): Int {
+    suspend fun processRecurring(): Int = recurringLock.withLock { processRecurringLocked() }
+
+    private suspend fun processRecurringLocked(): Int {
         val now = time.now()
         val zone = time.zone()
         var posted = 0
